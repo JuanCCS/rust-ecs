@@ -43,10 +43,7 @@ impl SimpleState for GOfLife {
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>){     
         let world = data.world;
         let sprite_sheet_handle = load_sprite_sheet(world);
-        world.register::<Worker>();
-
         initialize_camera(world);
-        
         initialize_walkers(world, sprite_sheet_handle);
     }
 }
@@ -56,7 +53,6 @@ fn initialize_camera(world: &mut World){
     // and (0, 0) is in the bottom left. 
     let mut transform = Transform::default();
     transform.set_translation_xyz(GAME_HEIGHT * 0.5, GAME_WIDTH * 0.5, 1.0);
-
     world
         .create_entity()
         .with(Camera::standard_2d(GAME_HEIGHT, GAME_WIDTH))
