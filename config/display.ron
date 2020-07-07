@@ -1,0 +1,4 @@
+(
+  title: "game_of_life",
+  dimensions: Some((500, 500)),
+)
