@@ -70,15 +70,23 @@ fn initialize_walkers(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet
     right_transform.set_translation_xyz(GAME_WIDTH - WORKER_WIDTH * 0.5, y, 0.0);
     
     // Assign the sprites for the paddles
-    let sprite_render = SpriteRender {
-        sprite_sheet: sprite_sheet_handle,
-        sprite_number: 1, // paddle is the first sprite in the sprite_sheet
+    let left_sprite = SpriteRender {
+        sprite_sheet: sprite_sheet_handle.clone(),
+        sprite_number: 1
     };
+
+
+    let right_sprite = SpriteRender {
+        sprite_sheet: sprite_sheet_handle,
+        sprite_number: 2
+    };
+        
+        
 
     // Create a left plank entity.
     world
         .create_entity()
-        .with(sprite_render.clone())
+        .with(left_sprite)
         .with(Worker::new(Side::Left))
         .with(left_transform)
         .build();
@@ -86,7 +94,7 @@ fn initialize_walkers(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet
     // Create right plank entity.
     world
         .create_entity()
-        .with(sprite_render.clone())
+        .with(right_sprite)
         .with(Worker::new(Side::Right))
         .with(right_transform)
         .build();
