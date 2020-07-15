@@ -44,7 +44,7 @@ impl SimpleState for GOfLife {
         let world = data.world;
         let sprite_sheet_handle = load_sprite_sheet(world);
         initialize_camera(world);
-        initialize_walkers(world, sprite_sheet_handle);
+  //      initialize_walkers(world, sprite_sheet_handle);
     }
 }
 
