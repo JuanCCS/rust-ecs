@@ -1,11 +1,10 @@
 (
   axes: {
-    "left_worker": Emulated(pos: Key(W), neg: Key(S)),
-    "right_worker": Emulated(pos: Key(A), neg: Key(D)),
-  },
-  actions: {
-    "enable_movement_left": [KeyReleased(W), KeyReleased(S)], 
-    "enable_movement_right": [KeyReleased(A), KeyReleased(D)], 
+        "left_worker": Emulated(pos: Key(W), neg: Key(S)),
+        "right_worker": Emulated(pos: Key(A), neg: Key(D)),
     },
+    actions: {
+        
+    }
 )
 

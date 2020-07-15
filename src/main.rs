@@ -40,8 +40,7 @@ fn main() -> amethyst::Result<()> {
         )?
         .with_bundle(TransformBundle::new())?
         .with_bundle(input_bundle)?
-        .with(systems::WorkerSystem, "worker_system", &["input_system"])
-        .with(systems::MoveEnableSystem, "worker_system", &["input_system"]);
+        .with(systems::WorkerSystem, "worker_system", &["input_system"]);
 
 
     let mut game = Application::new(assets_dir, GOfLife, game_data)?;

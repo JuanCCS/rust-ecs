@@ -1,9 +1,8 @@
 use amethyst::{
-    core::{Transform, SystemDesc},
-    derive::SystemDesc,
     ecs::{Join, Read, ReadStorage, System, SystemData, World, WriteStorage},
+    derive::{SystemDesc},
     input::{InputHandler, StringBindings},
-    core::math
+    core::{math, Transform, SystemDesc}
 };
 
 use crate::game_of_life::{Worker, Side, GAME_HEIGHT, WORKER_HEIGHT};
@@ -22,10 +21,6 @@ impl<'s> System<'s> for WorkerSystem {
     fn run(&mut self, (mut transforms, workers, input): Self::SystemData) {
         for (worker, transform) in (&workers, &mut transforms).join() { 
 
-            if(!worker.movement_enabled){
-                continue
-            }
-
             let movement = match worker.side {
                 Side::Left => input.axis_value("left_worker"),
                 Side::Right => input.axis_value("right_worker"),
@@ -33,7 +28,7 @@ impl<'s> System<'s> for WorkerSystem {
 
 
             if let Some(mv_amount) = movement {
-                let scaled_amount = (WORKER_HEIGHT * mv_amount).round() as f32;
+                let scaled_amount = WORKER_HEIGHT * mv_amount as f32;
                 let worker_y = transform.translation().y;
                 transform.set_translation_y(
                 (worker_y + scaled_amount)
@@ -42,30 +37,5 @@ impl<'s> System<'s> for WorkerSystem {
                 );
         }
     }
-}
-}
-
-
-#[derive(SystemDesc)]
-pub struct MoveEnableSystem;
-
-impl<'s> System<'s> for MoveEnableSystem {
-    type SystemData = (
-        WriteStorage<'s, Worker>,
-        Read<'s, InputHandler<StringBindings>>
-    );
-
-    fn run(&mut self, (mut workers, input): Self::SystemData) {
-        for worker in (&mut workers).join() {    
-            let enable = match worker.side {
-                Side::Left => input.action_is_down("enable_movement_left"),
-                Side::Right => input.action_is_down("enable_movement_right"),
-            };
-
-            if let Some(en) = enable {
-                worker.movement_enabled = en
-            } 
-        }
     }
 }
-

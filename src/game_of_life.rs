@@ -23,7 +23,6 @@ pub struct Worker {
     pub side: Side,
     pub width: f32,
     pub height: f32,
-    pub movement_enabled: bool
 }
 
 impl Worker {
@@ -32,7 +31,6 @@ impl Worker {
             side,
             width: WORKER_WIDTH,
             height: WORKER_HEIGHT,
-            movement_enabled: true
         }
     }
 }
