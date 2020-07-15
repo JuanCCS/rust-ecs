@@ -1,5 +1,6 @@
 use amethyst::{
-    core::{math::Vector3, timing::Time, transform::Transform},
+    core::{math::Vector3, timing::Time, transform::Transform, SystemDesc},
+    derive::{SystemDesc},
     ecs::*,
     shrev::{EventChannel, ReaderId},
 };
@@ -10,6 +11,7 @@ use rand::{
     thread_rng, Rng,
 };
 
+use rand::prelude::*;
 
 #[derive(Debug, Clone)]
 pub struct SpawnEvent {
@@ -17,40 +19,40 @@ pub struct SpawnEvent {
 }
 
 struct WorkerDistribution{
-    index: u32,
+    worker_index: u32,
 }
 
 impl Distribution<WorkerDistribution> for Standard{
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> WorkerDistribution {
         match rng.gen_range(0,3) {
             0 => WorkerDistribution{
-                index: 0,
+                worker_index: 0,
             },
             1 => WorkerDistribution {
-                index: 1,
+                worker_index: 1,
             },
-            2 => WorkerDistribution {
-                index: 2,
+            _ => WorkerDistribution {
+                worker_index: 2,
             }
         }
     }
 }
 
-
+#[derive(SystemDesc, Default)]
 pub struct SpawnSystem{
     reader_id: Option<ReaderId<SpawnEvent>>,
 }
 
 
 impl<'s> System<'s> for SpawnSystem{
-    type SystemData {
+    type SystemData = (
         Read<'s, EventChannel<SpawnEvent>>,
         Write<'s, LazyUpdate>,
-    }
+    );
 
-    fn setup(&mut self, res: &mut Resources){
-        Self::SystemData::setup(res);
-        self.reader_id = Some(res.fetch_mut::<EventChannel<SpawnEvent>>().register_reader())
+    fn setup(&mut self, world: &mut World){
+        Self::SystemData::setup(world);
+        self.reader_id = Some(world.fetch_mut::<EventChannel<SpawnEvent>>().register_reader())
     }
 
     fn run(&mut self, (spawn_events, lazy_update): Self::SystemData){
@@ -61,6 +63,7 @@ impl<'s> System<'s> for SpawnSystem{
     }
 }
 
+#[derive(SystemDesc, Default)]
 pub struct DebugTriggerSystem{
     spawn_timer: f32,
 }
@@ -73,8 +76,9 @@ impl<'s> System<'s> for DebugTriggerSystem{
         Read<'s, Time>,
     );
 
-    fn run(&mut self, (lazy_update, mut spawn_events, time){
+    fn run(&mut self, (lazy_update, mut spawn_events, time): Self::SystemData){
         let delta_seconds = time.delta_seconds();
+        self.spawn_timer -= delta_seconds;
         if self.spawn_timer <= 0.0 {
            self.spawn_timer = 1.5;
            let WorkerDistribution {worker_index} : WorkerDistribution = rand::random();
