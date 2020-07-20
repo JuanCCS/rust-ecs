@@ -25,8 +25,14 @@ pub struct Worker {
     pub height: f32,
 }
 
+use crate::{
+    resources::{load_assets, AssetType},
+};
+
+
+
 impl Worker {
-    fn new(side: Side) -> Worker {
+    pub fn new(side: Side) -> Worker {
         Worker {
             side,
             width: WORKER_WIDTH,
@@ -44,13 +50,16 @@ impl SimpleState for GOfLife {
         let world = data.world;
         let sprite_sheet_handle = load_sprite_sheet(world);
         initialize_camera(world);
-  //      initialize_walkers(world, sprite_sheet_handle);
     }
 }
 
 fn initialize_camera(world: &mut World){
     // Setup camera in a way that our screen covers whole arena 
     // and (0, 0) is in the bottom left. 
+    
+    load_assets(world, vec![AssetType::Worker]);
+
+
     let mut transform = Transform::default();
     transform.set_translation_xyz(GAME_HEIGHT * 0.5, GAME_WIDTH * 0.5, 1.0);
     world
