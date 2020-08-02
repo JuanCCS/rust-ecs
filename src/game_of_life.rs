@@ -6,10 +6,13 @@ use amethyst::{
     renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
 };
 
-pub const GAME_HEIGHT: f32 = 100.0;
-pub const GAME_WIDTH: f32 = 100.0;
-pub const WORKER_WIDTH: f32 = 16.0;
-pub const WORKER_HEIGHT: f32 = 16.0;
+const WORKER_SIZE: f32 = 16.0;
+const BOARD_SIZE: f32 = 8.0;
+
+pub const GAME_HEIGHT: f32 = WORKER_SIZE * BOARD_SIZE;
+pub const GAME_WIDTH: f32 =  GAME_HEIGHT;
+pub const WORKER_WIDTH: f32 = WORKER_SIZE;
+pub const WORKER_HEIGHT: f32 = WORKER_SIZE;
 
 pub struct GOfLife;
 

@@ -18,7 +18,7 @@ pub enum AssetType{
 
 #[derive(Default)]
 pub struct SpriteSheetList {
-    sprite_sheets: HashMap<AssetType, SpriteSheetHandle>,
+    sprite_sheets: HashMap<AssetType, Handle<SpriteSheet>>,
 }
 
 impl SpriteSheetList {
@@ -51,17 +51,17 @@ pub fn get_sprite_sheet_handle(
     world: &World,
     texture_path: &str,
     ron_path: &str,
-) -> SpriteSheetHandle {
+) -> Handle<SpriteSheet> {
     // Load the sprite sheet necessary to render the graphics.
     // The texture is the pixel data
     // `sprite_sheet` is the layout of the sprites on the image
     let texture_handle = {
-        let loader = &world.read_resource::<Loader>();
-        let texture_storage = &world.read_resource::<AssetStorage<Texture>>();
+        let loader = world.read_resource::<Loader>();
+        let texture_storage = world.read_resource::<AssetStorage<Texture>>();
         loader.load(texture_path, ImageFormat::default(), (), &texture_storage)
     };
-    let loader = &world.read_resource::<Loader>();
-    let sprite_sheet_store = &world.read_resource::<AssetStorage<SpriteSheet>>();
+    let loader = world.read_resource::<Loader>();
+    let sprite_sheet_store = world.read_resource::<AssetStorage<SpriteSheet>>();
     loader.load(
         ron_path,
         SpriteSheetFormat(texture_handle),

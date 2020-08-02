@@ -49,7 +49,8 @@ pub struct SpawnSystem{
     reader_id: Option<ReaderId<SpawnEvent>>,
 }
 
-
+// This System reads from the SpawnEvent channel and triggers the Spawning of the different
+// entities.
 impl<'s> System<'s> for SpawnSystem{
     type SystemData = (
         Entities<'s>,
@@ -71,7 +72,7 @@ impl<'s> System<'s> for SpawnSystem{
             println!("Handling Event: {}!", event.tile_index);
             let worker_sprite_sheet =
                     { sprite_sheet_list.get(AssetType::Worker).unwrap().clone() };
-            spawn_worker(&entities, worker_sprite_sheet, &lazy_update); 
+            spawn_worker(&entities, worker_sprite_sheet, &lazy_update, event.tile_index); 
         }
     }
 }
@@ -81,7 +82,8 @@ pub struct DebugTriggerSystem{
     spawn_timer: f32,
 }
 
-
+// This System is used to Debug the SpawnSystem, after x seconds it will write
+// to the SpawnEvent channel
 impl<'s> System<'s> for DebugTriggerSystem{
     type SystemData = (
         Read<'s, LazyUpdate>,
