@@ -37,7 +37,7 @@ pub fn spawn_worker(entities: &Entities,
         let new_x: f32 = get_position();
         println!("x: {}, y: {}", new_x, new_y);
         worker_transform.set_translation_xyz(new_x, new_y, 0.0);
-        lazy_update.insert(worker_entity, Worker::new(Side::Right));
+        lazy_update.insert(worker_entity, Worker::new(vec![0;16]));
         lazy_update.insert(worker_entity, worker_transform);
         lazy_update.insert(worker_entity, sprite_render);
 }

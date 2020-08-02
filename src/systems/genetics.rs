@@ -15,8 +15,7 @@ pub struct GeneticSystem{
     gen_population: bool
 }
 
-
-
+//TODO: Rename this to SpawnSystem 
 impl<'s> System<'s> for GeneticSystem{
     type SystemData = (
         Write<'s, EventChannel<SpawnEvent>>,

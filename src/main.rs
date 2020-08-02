@@ -14,6 +14,7 @@ mod game_of_life;
 mod systems;
 mod entities;
 mod resources;
+mod components;
 
 use crate::game_of_life::GOfLife;
 
