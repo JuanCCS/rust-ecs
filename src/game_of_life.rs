@@ -28,11 +28,11 @@ pub struct Worker {
 
 
 impl Worker {
-    pub fn new(worker_dna: Vec<u32>) -> Worker {
+    pub fn new(worker_dna: Dna) -> Worker {
         Worker {
             width: WORKER_WIDTH,
             height: WORKER_HEIGHT,
-            dna: Dna::new(&worker_dna)
+            dna: worker_dna
         }
     }
 }

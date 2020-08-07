@@ -1,6 +1,6 @@
 use amethyst::ecs::{Component, DenseVecStorage};
 
-#[derive(Component)]
+#[derive(Component, Clone, Debug)]
 #[storage(DenseVecStorage)]
 pub struct Dna{
     pub movements : Vec<u32>,

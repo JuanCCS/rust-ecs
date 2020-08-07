@@ -1,7 +1,6 @@
 use amethyst::{
     ecs::{Join, Read, System, SystemData, WriteStorage, Entities, Write},
     derive::{SystemDesc},
-    input::{InputHandler, StringBindings},
     core::{Transform}
 };
 
@@ -42,11 +41,14 @@ impl<'s> System<'s> for WorkerSystem {
     );
 
     fn run(&mut self, (mut transforms, workers, mut entities, mut context): Self::SystemData) {  
-        for (entity, transform, worker) in (&* entities, &mut transforms, &workers).join() { 
-            transform.append_translation_xyz(MOVE_DIRECTIONS[1].x, MOVE_DIRECTIONS[1].y, 0.);
-            if transform.translation().y < 0. || 0. > transform.translation().x || transform.translation().x > GAME_WIDTH {
-                let _ = entities.delete(entity);           
+        for (entity, transform, worker) in (&* entities, &mut transforms, &workers).join() {
+            if worker.dna.movements[context.iteration] == 1 {
+                let mv_index = worker.dna.choices[context.iteration] as usize;
+                transform.append_translation_xyz(MOVE_DIRECTIONS[mv_index].x * 16.0, MOVE_DIRECTIONS[mv_index].y * 16.0, 0.);
+                if transform.translation().y < 0. || 0. > transform.translation().x || transform.translation().x > GAME_WIDTH {
+                    let _ = entities.delete(entity);           
             } 
+        }
         }
         context.iteration += 1;
     }

@@ -8,6 +8,7 @@ use amethyst::{
 use crate::{
     entities::spawn_worker,
     resources::{SpriteSheetList, AssetType},
+    components::Dna
 };
 
 use rand::{
@@ -18,7 +19,8 @@ use rand::{
 #[derive(Debug, Clone)]
 pub struct SpawnEvent {
     pub tile_index: u32,
-    pub spawn_position: u32
+    pub spawn_position: u32,
+    pub worker_dna: Dna
 }
 
 pub struct WorkerDistribution{
@@ -67,7 +69,9 @@ impl<'s> System<'s> for SpawnSystem{
         for event in spawn_events.read(self.reader_id.as_mut().unwrap()){
             let worker_sprite_sheet =
                     { sprite_sheet_list.get(AssetType::Worker).unwrap().clone() };
-            spawn_worker(&entities, worker_sprite_sheet, &lazy_update, event.tile_index, event.spawn_position); 
+            spawn_worker(&entities, worker_sprite_sheet, 
+                &lazy_update, event.tile_index, 
+                event.spawn_position, event.worker_dna.clone()); 
         }
     }
 }
@@ -93,11 +97,12 @@ impl<'s> System<'s> for DebugTriggerSystem{
            self.spawn_timer = 1.5;
            let WorkerDistribution {worker_index} : WorkerDistribution = rand::random();
 
-           spawn_events.single_write(
-               SpawnEvent{
-                    tile_index: worker_index,
-                    spawn_position: 0
-               });
+//           spawn_events.single_write(
+//               SpawnEvent{
+//                    tile_index: worker_index,
+//                    spawn_position: 0
+//               });
+//        }
         }
     }
 }

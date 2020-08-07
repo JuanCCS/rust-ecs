@@ -1,7 +1,7 @@
 #[derive(Clone, Copy, Default)]
 pub struct GeneticsContext{
-    pub iteration: u32,
-    pub iters_per_generation: u32
+    pub iteration: usize,
+    pub iters_per_generation: usize
 }
 
 impl GeneticsContext {

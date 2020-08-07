@@ -45,8 +45,8 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(input_bundle)?
         .with(systems::WorkerSystem, "worker_system", &["input_system"])
         .with(systems::SpawnSystem::default(), "spawn_system", &[])
-//        .with(systems::DebugTriggerSystem::default(), "debug_trigger", &[])
-        .with(systems::GeneticSystem::default(), "genetic_system", &[]);
+        .with(systems::GeneticsSpawnSystem::default(), "genspawn_system", &[])
+        .with(systems::FitnessSystem::default(), "fitness_system", &[]);
 
     let mut game = Application::new(assets_dir, GOfLife, game_data)?;
     game.run();
