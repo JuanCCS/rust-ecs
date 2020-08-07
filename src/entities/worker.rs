@@ -1,16 +1,13 @@
 use amethyst::{
-    assets::{AssetStorage, Loader, Handle},
-    core::{math::Vector3, timing::Time, Transform, SystemDesc},
-    derive::{SystemDesc},
-    ecs::*,
-    shrev::{EventChannel, ReaderId},
-    renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
+    assets::{Handle},
+    core::{Transform},
+    ecs::{Entity, LazyUpdate, Write, Entities},
+    renderer::{SpriteSheet, SpriteRender}
 };
 
-use rand::prelude::*;
 use std::convert::TryFrom;
 use crate::{
-    game_of_life::{Worker, Side},
+    game_of_life::{Worker},
 };
 
 pub fn spawn_worker(entities: &Entities, 

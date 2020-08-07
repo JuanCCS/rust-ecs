@@ -1,10 +1,8 @@
 use amethyst::{
-    assets::{AssetStorage, Loader, Handle},
-    core::{math::Vector3, timing::Time, transform::Transform, SystemDesc},
+    core::{timing::Time},
     derive::{SystemDesc},
     ecs::*,
     shrev::{EventChannel, ReaderId},
-    renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
 };
 
 use crate::{
@@ -13,11 +11,9 @@ use crate::{
 };
 
 use rand::{
-    distributions::{Distribution, Standard},
-    thread_rng, Rng,
+    distributions::{Distribution, Standard}, Rng,
 };
 
-use rand::prelude::*;
 
 #[derive(Debug, Clone)]
 pub struct SpawnEvent {

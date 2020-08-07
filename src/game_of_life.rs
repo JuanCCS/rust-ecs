@@ -1,9 +1,8 @@
 use amethyst::{
-    assets::{AssetStorage, Loader, Handle},
     core::transform::Transform,
     ecs::prelude::{Component, DenseVecStorage},
     prelude::*,
-    renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
+    renderer::{Camera},
 };
 
 const WORKER_SIZE: f32 = 16.0;
@@ -16,14 +15,8 @@ pub const WORKER_HEIGHT: f32 = WORKER_SIZE;
 
 pub struct GOfLife;
 
-#[derive(PartialEq, Eq)]
-pub enum Side {
-    Left,
-    Right,
-}
-
 use crate::{
-    resources::{load_assets, AssetType},
+    resources::{load_assets, AssetType, GeneticsContext},
     components::Dna
 };
 
@@ -51,6 +44,7 @@ impl Component for Worker{
 impl SimpleState for GOfLife {
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>){     
         let world = data.world;
+        world.insert(GeneticsContext::new());
         initialize_camera(world);
     }
 }

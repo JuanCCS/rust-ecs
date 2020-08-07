@@ -1,12 +1,11 @@
 use amethyst::{
-    ecs::{Join, Read, ReadStorage, System, SystemData, World, WriteStorage},
+    ecs::{Join, Read, System, SystemData, WriteStorage, Entities},
     derive::{SystemDesc},
     input::{InputHandler, StringBindings},
-    core::{math, Transform, SystemDesc, math::Vector2}
+    core::{Transform}
 };
 
-use crate::game_of_life::{Worker, Side, GAME_HEIGHT, WORKER_HEIGHT};
-
+use crate::game_of_life::{Worker, GAME_WIDTH};
 
 #[derive(SystemDesc)]
 pub struct WorkerSystem;
@@ -35,12 +34,20 @@ impl<'s> System<'s> for WorkerSystem {
     type SystemData = (
         WriteStorage<'s, Transform>,
         WriteStorage<'s, Worker>,
-        Read<'s, InputHandler<StringBindings>>,
+        Entities<'s>
     );
 
-    fn run(&mut self, (mut transforms, workers, input): Self::SystemData) {
-        for (worker, transform) in (&workers, &mut transforms).join() {
-            transform.append_translation_xyz(MOVE_DIRECTIONS[1].x, MOVE_DIRECTIONS[1].y * 16., 0.);
+    fn run(&mut self, (mut transforms, workers, mut entities): Self::SystemData) {
+    
+        for (worker, transform) in (&workers, &mut transforms).join(){
+            transform.append_translation_xyz(MOVE_DIRECTIONS[1].x, MOVE_DIRECTIONS[1].y, 0.);
+        }
+
+        for (entity, transform, worker) in (&* entities, &transforms, &workers).join() {
+            println!("{:#?}", transform.translation()); 
+            if transform.translation().y < 0. || 0. > transform.translation().x || transform.translation().x > GAME_WIDTH {
+                let _ = entities.delete(entity);           
+            } 
         }
     }
 }

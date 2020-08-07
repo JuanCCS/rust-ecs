@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use amethyst::{
-    assets::{AssetStorage, Handle, Loader, Prefab, PrefabLoader, ProgressCounter, RonFormat},
+    assets::{AssetStorage, Handle, Loader},
     ecs::prelude::World,
     prelude::WorldExt, 
     renderer::{

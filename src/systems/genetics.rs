@@ -1,12 +1,11 @@
 use amethyst::{
-    core::{math::Vector3, timing::Time, transform::Transform, SystemDesc},
+    core::{Time},
     derive::{SystemDesc},
     ecs::*,
-    shrev::{EventChannel, ReaderId},
+    shrev::{EventChannel},
 };
 
 use super::spawner::{WorkerDistribution, SpawnEvent};
-use rand::prelude::*;
 
 #[derive(SystemDesc, Default)]
 pub struct GeneticSystem{

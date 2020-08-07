@@ -1,38 +1,46 @@
 use amethyst::{
-    core::{math::Vector3, timing::Time, transform::Transform, SystemDesc},
+    core::{transform::Transform},
     derive::{SystemDesc},
     ecs::*,
-    shrev::{EventChannel, ReaderId},
 };
 
-pub struct FitnessSystem{
-    iteration: u32,
-    iter_per_generation: u32
-}
+use crate::{
+    resources::GeneticsContext,
+    components::Dna,
+    game_of_life::Worker
+};
+
+#[derive(SystemDesc, Default)]
+pub struct FitnessSystem;
+
 
 fn calc_fitness(worker: &Worker, transform: &Transform)->f32{
-   let y_distance = transform.translation.y();
-   let sum_choices = worker.dna.choices.sum();
+   let y_distance = transform.translation().y;
+   let sum_choices = worker.dna.choices.iter().sum::<u32>() as f32;
    y_distance / sum_choices
 }
 
-impl<'s> System<'s> for GeneticSystem{
+impl<'s> System<'s> for FitnessSystem{
     type SystemData = (
         ReadStorage<'s, Transform>,
-        ReadStorage<'s, Worker>
+        ReadStorage<'s, Worker>,
+        Read<'s, GeneticsContext>
     );
-
-    fn setup(&mut self, world: &mut World){
-       Self::SystemData::setup(world);
-       self.iteration = 0;
-       self.iter_per_generation = 8;
-    }
-
-    fn run(&mut self, (transforms, workers) : Self::SystemData){
-        if self.iteration == self.iter_per_generation {
-            self.iteration = 0;
+    
+    fn run(&mut self, (transforms, workers, context) : Self::SystemData){
+        if context.iteration == (context.iters_per_generation - 1) {
+            let mut max_fitness = 0.;
+            let mut best_dna = &Dna::new(&vec![0, 16]);
+            let mut second_best_dna = &Dna::new(&vec![0; 16]);
+            for (worker, transform) in (&workers, &transforms).join() {
+                let worker_fitness = calc_fitness(worker, transform);
+                if worker_fitness > max_fitness{
+                    max_fitness = worker_fitness;
+                    second_best_dna = best_dna;
+                    best_dna = &worker.dna;
+                }
+            }
         }
-        self.iteration += 1; 
     }
 }
 
