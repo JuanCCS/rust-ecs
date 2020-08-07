@@ -22,6 +22,7 @@ use rand::prelude::*;
 #[derive(Debug, Clone)]
 pub struct SpawnEvent {
     pub tile_index: u32,
+    pub spawn_position: u32
 }
 
 pub struct WorkerDistribution{
@@ -68,11 +69,9 @@ impl<'s> System<'s> for SpawnSystem{
 
     fn run(&mut self, (entities, spawn_events, lazy_update, sprite_sheet_list): Self::SystemData){
         for event in spawn_events.read(self.reader_id.as_mut().unwrap()){
-            // lazy_update.create_entity()
-            println!("Handling Event: {}!", event.tile_index);
             let worker_sprite_sheet =
                     { sprite_sheet_list.get(AssetType::Worker).unwrap().clone() };
-            spawn_worker(&entities, worker_sprite_sheet, &lazy_update, event.tile_index); 
+            spawn_worker(&entities, worker_sprite_sheet, &lazy_update, event.tile_index, event.spawn_position); 
         }
     }
 }
@@ -100,7 +99,8 @@ impl<'s> System<'s> for DebugTriggerSystem{
 
            spawn_events.single_write(
                SpawnEvent{
-                    tile_index: worker_index
+                    tile_index: worker_index,
+                    spawn_position: 0
                });
         }
     }

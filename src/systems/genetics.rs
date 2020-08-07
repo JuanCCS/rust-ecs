@@ -25,7 +25,7 @@ impl<'s> System<'s> for GeneticSystem{
 
     fn setup(&mut self, world: &mut World){
         Self::SystemData::setup(world);
-        self.population = 10;
+        self.population = 32;
         self.gen_population = true; 
     }
 
@@ -40,7 +40,8 @@ impl<'s> System<'s> for GeneticSystem{
 
                spawn_events.single_write(
                    SpawnEvent{
-                        tile_index: worker_index
+                        tile_index: worker_index,
+                        spawn_position: i
                    });
                 }
         }

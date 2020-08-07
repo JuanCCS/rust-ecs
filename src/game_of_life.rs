@@ -7,7 +7,7 @@ use amethyst::{
 };
 
 const WORKER_SIZE: f32 = 16.0;
-const BOARD_SIZE: f32 = 8.0;
+const BOARD_SIZE: f32 = 32.0;
 
 pub const GAME_HEIGHT: f32 = WORKER_SIZE * BOARD_SIZE;
 pub const GAME_WIDTH: f32 =  GAME_HEIGHT;
