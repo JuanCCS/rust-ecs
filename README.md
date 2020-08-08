@@ -1,4 +1,10 @@
-# game_of_life
+# Rust - Amethyst - Genetic Algorithm
+
+This project was an exploration of the Amethyst game engine, as well as of 
+the Rust programming language. Both were really fun! 
+
+I also made this project using nvim exclusively, which was a text editor
+I was eager to learn more about.
 
 ## How to run
 
