@@ -41,9 +41,9 @@ impl<'s> System<'s> for WorkerSystem {
     );
 
     fn run(&mut self, (mut transforms, workers, mut entities, mut context): Self::SystemData) {  
-        for (entity, transform, worker) in (&* entities, &mut transforms, &workers).join() {
-            if worker.dna.movements[context.iteration] == 1 {
-                let mv_index = worker.dna.choices[context.iteration] as usize;
+        for (entity, transform, worker) in (&* entities, &mut transforms, &workers).join() {  
+            let mv_index = worker.dna.choices[context.iteration] as usize;
+            if mv_index < 9 && worker.dna.movements[mv_index] == 1 {
                 transform.append_translation_xyz(MOVE_DIRECTIONS[mv_index].x * 16.0, MOVE_DIRECTIONS[mv_index].y * 16.0, 0.);
                 if transform.translation().y < 0. || 0. > transform.translation().x || transform.translation().x > GAME_WIDTH {
                     let _ = entities.delete(entity);           

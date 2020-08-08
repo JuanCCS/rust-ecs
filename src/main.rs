@@ -7,7 +7,8 @@ use amethyst::{
         types::DefaultBackend,
         RenderingBundle,
     },
-    utils::application_root_dir
+    utils::application_root_dir,
+    ui::{UiBundle, RenderUi}
 };
 
 mod game_of_life;
@@ -32,17 +33,19 @@ fn main() -> amethyst::Result<()> {
 
     let input_bundle = InputBundle::<StringBindings>::new().with_bindings_from_file(binding_path)?;
 
-    let game_data = GameDataBuilder::default()
+    let game_data = GameDataBuilder::default() 
+        .with_bundle(TransformBundle::new())? 
+        .with_bundle(input_bundle)?
         .with_bundle(
             RenderingBundle::<DefaultBackend>::new()
                 .with_plugin(
                     RenderToWindow::from_config_path(display_config_path)?
                         .with_clear([0.34, 0.36, 0.52, 1.0]),
                 )
-                .with_plugin(RenderFlat2D::default()),
+                .with_plugin(RenderFlat2D::default())
+                .with_plugin(RenderUi::default()),
         )?
-        .with_bundle(TransformBundle::new())?
-        .with_bundle(input_bundle)?
+        .with_bundle(UiBundle::<StringBindings>::new())?
         .with(systems::WorkerSystem, "worker_system", &["input_system"])
         .with(systems::SpawnSystem::default(), "spawn_system", &[])
         .with(systems::GeneticsSpawnSystem::default(), "genspawn_system", &[])
